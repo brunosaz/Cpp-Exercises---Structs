@@ -12,7 +12,7 @@ cBanco::cBanco(const cBanco& orig) {
 cBanco::~cBanco() {
 }
 
-float cBanco::gerenciarConta(clientes vetClientes){
+void cBanco::gerenciarConta(clientes vetClientes){
     int opc=0;
     system ("cls||clear");
     do{
@@ -41,15 +41,13 @@ float cBanco::gerenciarConta(clientes vetClientes){
                 cout << "Saindo...";        
                 break;
             default:
-                cout << endl << "Opção inválida" << endl;
+                cout << endl << "Caso inválido";
         }
-    }while(opc!=0);
-    
-    return vetClientes.saldo;
+    }while(opc!=0); 
 }
 
 void cBanco::cadastro(){ //Step 1
-    int n=3, i=0, opc, cont;
+    int n=3, i=0;
     clientes vetClientes[n];
     
     while(i<n){
@@ -69,29 +67,11 @@ void cBanco::cadastro(){ //Step 1
         i++;
     } 
     this->metBolha(vetClientes,n);
-    cont = this->login(vetClientes,n);
-    
-    do{
-        if(cont!=-1){
-            cout << "Login efetuado!" << endl;
-            vetClientes[cont].saldo = this->gerenciarConta(vetClientes[cont]);
-        }else if(cont==-1){
-            cout << endl << "Tente fazer login novamente!" << endl;
-            this->login(vetClientes,n);
-        }
-        cout << "Deseja efetuar outro login? (1-SIM) (0-NÃO): ";
-        cin >> opc;
-        if(opc==1)
-            cont = this->login(vetClientes,n); 
-        
-    }while(opc!=0);
-        
+    this->login(vetClientes,n);
 }
 
 void cBanco::extrato(clientes cliente){
     system("cls||clear");
-    cout << "----------------------------------------------------------" << endl;
-    cout << "-------------------------EXTRATO--------------------------" << endl;
     cout << "----------------------------------------------------------" << endl;
     cout << "Nome: " << cliente.nome << endl;
     cout << "CPF: " << cliente.cpf << endl;
@@ -154,36 +134,33 @@ int cBanco::pesquisa(clientes cliente[], long int chave, int n){
     return -1;
 }
 
-int cBanco::login(clientes cliente[], int n){
-    int opc=1, i=0;
-
-    system("cls||clear");
-    long int cpf;
-    cout << "Insira o CPF da sua conta para efetuar login: ";
-    cin >> cpf;
-    int cont = pesquisa(cliente, cpf, n), senha;
-    if(cont!=(-1)){
+void cBanco::login(clientes cliente[], int n){
+    int opc=1;
+    while(opc!=0){
         system("cls||clear");
-        cout << "CPF: " << cliente[cont].cpf << endl;
-        while(senha!=cliente[cont].senha && i<3){
-            cout << "Senha: ";
-            cin >> senha;
-            if(senha==cliente[cont].senha){
-                cout << endl << "Senha correta!" << endl;
-                return cont;
-            }else{
-                cout << endl << "Senha incorreta!" << endl;
-                i++;
+        long int cpf;
+        cout << "Insira o CPF da sua conta para efetuar login: ";
+        cin >> cpf;
+        int cont = pesquisa(cliente, cpf, n), senha;
+        if(cont!=(-1)){
+            system("cls||clear");
+            cout << "CPF: " << cliente[cont].cpf << endl;
+            while(senha!=cliente[cont].senha){
+                cout << "Senha: ";
+                cin >> senha;
+                if(senha==cliente[cont].senha){
+                    cout << endl << "Senha correta!" << endl;
+                    this->gerenciarConta(cliente[cont]);
+                }else
+                    cout << endl << "Senha incorreta!" << endl;
             }
-        }
-        if(i>=3){
-            cout << endl << "As tentativas de login alcançaram o limite, tente novamente!";
-            return -1;
-        }
-    }else
-        cout << endl << "CPF inválido!";
-
-    return -1;
+        }else
+            cout << endl << "CPF inválido!";
+        cout << endl << "Deseja efetuar outro login? (1-SIM) (0-NÃO): ";
+        cin >> opc;
+    }
+    system("cls||clear");
+    cout << "*********************** SISTEMA ENCERRADO ***********************";
 }
 
 

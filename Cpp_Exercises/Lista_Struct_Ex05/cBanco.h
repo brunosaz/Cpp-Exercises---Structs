@@ -21,10 +21,10 @@ public:
     void metBolha(clientes cliente[], int n);
     void extrato(clientes cliente);
     void cadastro();
-    float gerenciarConta(clientes vetClientes);
+    void gerenciarConta(clientes vetClientes);
     float deposito(float saldo);
     float saque(float saldo);
-    int login(clientes cliente[], int n);
+    void login(clientes cliente[], int n);
     
 private:
 
